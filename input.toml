@@ -1,0 +1,13 @@
+title = ""
+
+# enter categories names in the list as ["cat name1", "cat name2"]
+categories = [] 
+
+featured_media_path = ""
+
+content_path = "" # optional if you want the content from a file
+
+content = """
+
+"""
+
