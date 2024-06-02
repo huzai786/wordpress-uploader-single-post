@@ -7,18 +7,6 @@ class PostOutput(NamedTuple):
     id: str | None
     slug: str
 
-# class PostData(NamedTuple):
-#     slug: str | None = None
-#     status: str | None = None
-#     title: str | None = None
-#     content: str | None = None
-#     excerpt: str | None = None
-#     comment_status: str | None = None
-#     ping_status: str | None = None
-#     format: str | None = None
-#     categories: list[int] | None = None
-#     featured_media: int | None = None
-
 class PostData(NamedTuple):
     title: str | None = None
     content: str | None = None

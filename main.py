@@ -5,7 +5,7 @@ from credentials import username, password, site_url
 from wordpressapi.media_crud import WordpressApiMediaCrud, MediaData
 from wordpressapi.post_crud import WordpressApiPostCrud, PostData
 from wordpressapi.category_crud import WordpressApiCategoryCrud, CategoryData
-
+from wordpressapi.tag_crud import WordpressApiTagCrud, TagData
 # get and verify credentials
 if not username or not password or not site_url:
     print("Username or password or site url")
@@ -33,6 +33,7 @@ featured_media_path = data["featured_media_path"]
 categories = data["categories"]
 content_path = data["content_path"]
 content: str = data["content"]
+tags = data["tags"]
 
 content = content.strip("\n")
 if not content_path and not content:
@@ -65,6 +66,23 @@ for category in categories:  # categories is the input from user
             print("Failed to create category in wordpress due to unexpected error, try again later!")
             sys.exit()
 
+# --------------- tags --------------- #
+tag_ids = []
+wptagapi = WordpressApiTagCrud(username, password, site_url)
+wp_tags: list[tuple[int, str]] = wptagapi.get_tags()
+for tag in tags:
+    if tag in [t[0] for t in wp_tags]:
+        tag_ids.append( [t[0] for t in wp_tags if t[1] == tag][0] )
+    else:
+        # create that tag
+        tag_data = TagData(description=tag, name=tag, )
+        created, output = wptagapi.create_tag(tag_data)
+        if created:
+            tag_ids.append(output.id)
+        else:
+            print("Failed to create tag in wordpress due to unexpected error, try again later!")
+            sys.exit()
+            
 # ------------ featured media ------------ #
 
 featured_media_id = None
