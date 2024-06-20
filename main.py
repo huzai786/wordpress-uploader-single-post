@@ -11,6 +11,7 @@ if not username or not password or not site_url:
     print("Username or password or site url")
     sys.exit()
 
+
 # get user input and verify it
 with open("input.toml", "r") as f:
     toml_data_str = f.read()
@@ -37,11 +38,11 @@ tags = data["tags"]
 
 content = content.strip("\n")
 if not content_path and not content:
-    print("Either enter content html file path or add content")
+    print("Either enter content file path or add content")
     sys.exit()
 
 if not content:
-    with open(content_path, 'r') as f:
+    with open(content_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
 if featured_media_path and not os.path.exists(featured_media_path):
@@ -75,13 +76,10 @@ for tag in tags:
         tag_ids.append( [t[0] for t in wp_tags if t[1] == tag][0] )
     else:
         # create that tag
-        tag_data = TagData(description=tag, name=tag, )
+        tag_data = TagData(description=tag, name=tag)
         created, output = wptagapi.create_tag(tag_data)
         if created:
             tag_ids.append(output.id)
-        else:
-            print("Failed to create tag in wordpress due to unexpected error, try again later!")
-            sys.exit()
             
 # ------------ featured media ------------ #
 

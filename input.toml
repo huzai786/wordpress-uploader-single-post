@@ -1,16 +1,16 @@
-title = "Testing Program"
+title = "Testing Program HINDI"
 
 # enter categories names in the list as ["cat name1", "cat name2"]
 categories = ["best games", "worst games"] 
 
-# enter categories names in the list as ["tag1", "tag2"]
+# enter tag names in the list as ["tag1", "tag2"]
 tags = ["best games", "worst games"]
 
 featured_media_path = ""
 
-content_path = "" # optional if you want the content from a file
+content_path = "german.html" # optional if you want the content from a file
 
 content = """
-this is a testing content
+
 """
 
