@@ -1,16 +1,26 @@
 import sys
 import os
 import tomllib
-from credentials import username, password, site_url
+# from credentials import username, password, site_url
 from wordpressapi.media_crud import WordpressApiMediaCrud, MediaData
 from wordpressapi.post_crud import WordpressApiPostCrud, PostData
 from wordpressapi.category_crud import WordpressApiCategoryCrud, CategoryData
 from wordpressapi.tag_crud import WordpressApiTagCrud, TagData
+
+if not os.path.exists("credentials.toml"):
+    sys.exit()
+
+with open("credentials.toml", "r") as f:
+    credentials = tomllib.loads(f.read()) 
+
+username = credentials.get("username")
+password = credentials.get("password")
+site_url = credentials.get("site_url")
+
 # get and verify credentials
 if not username or not password or not site_url:
     print("Username or password or site url")
     sys.exit()
-
 
 # get user input and verify it
 with open("input.toml", "r") as f:
@@ -72,7 +82,7 @@ tag_ids = []
 wptagapi = WordpressApiTagCrud(username, password, site_url)
 wp_tags: list[tuple[int, str]] = wptagapi.get_tags()
 for tag in tags:
-    if tag in [t[0] for t in wp_tags]:
+    if tag in [t[1] for t in wp_tags]:
         tag_ids.append( [t[0] for t in wp_tags if t[1] == tag][0] )
     else:
         # create that tag
@@ -80,7 +90,7 @@ for tag in tags:
         created, output = wptagapi.create_tag(tag_data)
         if created:
             tag_ids.append(output.id)
-            
+
 # ------------ featured media ------------ #
 
 featured_media_id = None
@@ -99,9 +109,9 @@ if featured_media_path:
 
 wppost = WordpressApiPostCrud(username, password, site_url)
 if category_ids:
-    post_data = PostData(title, content, category_ids, featured_media_id)
+    post_data = PostData(title, content, category_ids, featured_media=featured_media_id, tags=tag_ids)
 else:
-    post_data = PostData(title=title, content=content, featured_media=featured_media_id)
+    post_data = PostData(title=title, content=content, featured_media=featured_media_id, tags=tag_ids)
 
 
 created, postid = wppost.create_post(post_data)

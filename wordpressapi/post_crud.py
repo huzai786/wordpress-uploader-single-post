@@ -11,6 +11,7 @@ class PostData(NamedTuple):
     title: str | None = None
     content: str | None = None
     categories: list[int] | None = None
+    tags: list[int] | None = None
     featured_media: int | None = None
     status: str = "publish"
     comment_status: str = "open"

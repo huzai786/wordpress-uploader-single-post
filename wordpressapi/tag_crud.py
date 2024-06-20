@@ -35,6 +35,7 @@ class WordpressApiTagCrud:
                 return True, tag_output
             else:
                 return False, response.json()
+            
         except requests.RequestException as e:
             print(e)
             return False, None
